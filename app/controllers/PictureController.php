@@ -164,6 +164,9 @@ class PictureController extends Phalcon\Mvc\Controller
 		//删除图片信息
 		$res=$model->delete();
 		if($resouse&&$res){
+			$log=new LogModel();
+			//操作记录数据
+			$log->insertLog($content='删除一张图片');
 			echo '1';
 		}
 		else{

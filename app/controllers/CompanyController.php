@@ -51,6 +51,9 @@ class CompanyController extends Phalcon\Mvc\Controller
 			$res=$model->update();
 		}
 		if($res){
+			$log=new LogModel();
+			//操作记录数据
+			$log->insertLog($content='修改公司名称');
 			echo '1';
 		}
 		else{
@@ -65,6 +68,9 @@ class CompanyController extends Phalcon\Mvc\Controller
 		$model->companyId=$this->request->getPost('id');
 		$result=$model->delete();
 		if($result){
+			$log=new LogModel();
+			//操作记录数据
+			$log->insertLog($content='删除一个公司信息');
 			echo '1';die();
 		}
 		else{

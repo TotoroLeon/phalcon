@@ -193,6 +193,9 @@ class StadiumController extends Phalcon\Mvc\Controller
 		$checktwo=$picture->delete();
 		
 		if($checkone && $checktwo){
+			$log=new LogModel();
+			//操作记录数据
+			$log->insertLog($content='删除场馆');
 			echo '1';
 		}
 		else{
