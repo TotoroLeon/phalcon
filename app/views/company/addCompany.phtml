@@ -37,7 +37,7 @@
      <script type="text/javascript">
          $(function() {
          });
-         function f_alert2(type)
+         function f_alert2(type,value)
          {
              switch (type)
              {
@@ -45,7 +45,7 @@
                      $.ligerDialog.success('添加成功');
                      break;
                  case "false":
-                     $.ligerDialog.warn('公司名称不能为空');
+                     $.ligerDialog.warn(value);
                      break;
              }
          }
@@ -55,12 +55,12 @@
     function check(){
      var data=$(":input[name='companyName']").val();
     	$.post("addCompanyFunc",{companyName:data},function(result){
-    			if(result=='1'){
-    				f_alert2('success');
+    			if(result==true){
+    				f_alert2('success',result);
     				document.getElementById("companyName").value="";
     			}
     			else{
-    				f_alert2('false');
+    				f_alert2('false',result);
     				document.getElementById("companyName").value="";
     			}
   				});

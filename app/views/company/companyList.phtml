@@ -65,6 +65,7 @@
         }
         function cancelEdit(rowid,trueid) { 
             manager.cancelEdit(rowid);
+            window.location.reload();
         }
         function endEdit(rowid,trueid,name)
         {
@@ -73,10 +74,9 @@
         	var vall=JSON.stringify(manager.getUpdated());
         	$.post("editCompany",{jsonData:vall},function(result){
     			if(result=='1'){
-    				
     			}
     			else{
-    				alert('wrong');
+    				alert(result);
     				manager.beginEdit(rowid);
     			}
   				});

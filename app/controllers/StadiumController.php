@@ -42,7 +42,7 @@ class StadiumController extends Phalcon\Mvc\Controller
 		$model->gpsLong=$this->request->getPost('gpsLong');
 		$model->gpsDim=$this->request->getPost('gpsDim');
 		$model->addTime=$time;
-		if($model->staName!=''&&$model->belongComId!=""&&$model->staAddress!=""){
+		if($model->checkstaName($model->staName) && $model->checkstaAddress($model->staAddress) && $model->checkLong($model->gpsLong) && $model->checkDim($model->gpsDim)){
 			$model->save();
 			if($model->staId){		
 			// 保存图片
@@ -77,11 +77,15 @@ class StadiumController extends Phalcon\Mvc\Controller
 		}
 		}
 		else{
-		$response->redirect("pictureList",true);
+			
+			foreach ($model->getMessages() as $message) {
+        		//echo $message. "\n";
+    		}
+				$response->redirect("pictureList",true);
 				$response->setStatusCode(200, "OK");
 				$response->setContent('<html><body>
 				<script language="JavaScript">
-				alert("添加失败，数据不完整！（名称地址为必填项）");window.location.href="addStadium";
+				alert("'.$message.'");window.history.go(-1);
 				</script>
 				</body></html>');
 				$response->send();
@@ -109,7 +113,7 @@ class StadiumController extends Phalcon\Mvc\Controller
 	}
 	//场馆修改页面
 	public function editStadiumAction(){
-		//$response = new \Phalcon\Http\Response();
+		$response = new \Phalcon\Http\Response();
 		if($this->request->getPost('sub')==''){
 		$model=new StadiumModel();
 		$staId=$this->request->get('id');
@@ -141,7 +145,8 @@ class StadiumController extends Phalcon\Mvc\Controller
 		$models->gpsLong=$this->request->getPost('gpsLong');
 		$models->gpsDim=$this->request->getPost('gpsDim');
 		$models->addTime=$time;
-		$result=$models->update();
+		if($models->checkstaAddress($models->staAddress) && $models->checkLong($models->gpsLong) && $models->checkDim($models->gpsDim))
+		{$result=$models->update();
 		//echo '<pre>';var_dump($models);
 		if($result){
 			$log=new LogModel();
@@ -151,7 +156,6 @@ class StadiumController extends Phalcon\Mvc\Controller
 			 	//跳转
 			 	//echo '<script>setTimeout("window.opener = "xxx";window.close();;",1000);</script>';
 			 	
-			 	$response = new Phalcon\Http\Response();
 				$response->redirect("stadiumList",true);
 				$response->setStatusCode(200, "OK");
 				$response->setContent('<html><body>
@@ -162,16 +166,24 @@ class StadiumController extends Phalcon\Mvc\Controller
 				$response->send();
 			 	
 			 	//$response->redirect("stadiumList");
+			}
+			else{
+			
+			}
 		}
 		else{
-		
+			foreach ($models->getMessages() as $message){} ;
+				$response->redirect("stadiumList",true);
+				$response->setStatusCode(200, "OK");
+				$response->setContent('<html><body>
+				<script language="JavaScript">
+				alert("'.$message.'");window.history.go(-1);
+				</script>
+				</body></html>');
+				$response->send();
 		}
-		die();
+			die();
 		}
-		
-	}
-	//场馆修改功能
-	public function editFuncAction(){
 		
 	}
 	//场馆信息删除
