@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+</title>  
+<script src="http://www.cnblogs.com/lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script> 
+<?php 
+    echo Phalcon\Tag::stylesheetLink("js/lib/ligerUI/skins/Aqua/css/ligerui-all.css"); 
+	echo Phalcon\Tag::javascriptInclude("js/lib/jquery/jquery-1.5.2.min.js");
+	echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/ligerui.min.js");
+    ?>
+ </head>    
+<body>
+	<div id="maingrid"></div>
+<a class="l-button" style="width:60px; float:left; margin-left:10px;" onclick="f_add()">添加</a>
+
+<a class="l-button" style="width:60px; float:left; margin-left:10px;" onclick="f_modify()">修改</a>
+
+<a class="l-button" style="width:60px; float:left; margin-left:10px;" onclick="f_delete()">删除</a>
+
+<a class="l-button" style="width:60px; float:left; margin-left:10px;" onclick="f_reload()">刷新</a>
+ <div class="l-clear"></div>
+    <div id="maingrid" style="margin-top:20px"></div> <br />
+       <br /> 
+  <div style="display:none;">
+  	
+  <script type="text/javascript">
+    var griddata = 
+	<?php echo $jsonData;?>
+
+     var grid = $("#maingrid").ligerGrid({
+            columns: [
+                { name: 'lid', display: '记录编号', width: '10%' },
+                { name: 'userName', display: '操作人', width: '15%' },
+                { name: 'insertTime', display: '操作时间', width: '20%' },
+                { name: 'content', display: '操作内容', width: '20%' },
+                { name: 'insertIp', display: '操作Ip', width: '20%' },
+                { name: 'typeId', display: '操作类型', width: '15%' }
+            ],
+            data: { Rows: griddata }
+        }); 
+</script>
+   <!-- g data total ttt -->
+</div>
+</body>
+</html>
