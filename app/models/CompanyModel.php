@@ -36,6 +36,14 @@ class CompanyModel extends Phalcon\Mvc\Model
 		}
 		return $array;
 	}
+	//Search
+	public function searchCompanyName($value){
+		$company= CompanyModel::find(array("conditions" => "companyName LIKE '%".$value."%' "))->toArray();
+		//$array=array();
+		
+		return $company;
+	}
+	
 	public function check()
     {
 		//不能为空

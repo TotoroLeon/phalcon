@@ -15,7 +15,8 @@ class StadiumController extends Phalcon\Mvc\Controller
 	}
 	//添加场馆页面
 	
-	public function addStadiumAction(){
+	public function addStadiumAction()
+	{
 		//添加人
 		$model=new UserModel();
 		$value=$model->getUserInfo(2);
@@ -29,7 +30,8 @@ class StadiumController extends Phalcon\Mvc\Controller
 		$this->view->setVar('companyList',$companylist);
 	}
 	//添加场馆功能
-	public function addStadiumFuncAction(){
+	public function addStadiumFuncAction()
+	{
 		$model=new StadiumModel();
 		$response = new Phalcon\Http\Response();
 		$time=time();
@@ -44,7 +46,8 @@ class StadiumController extends Phalcon\Mvc\Controller
 		$model->addTime=$time;
 		if($model->checkstaName($model->staName) && $model->checkstaAddress($model->staAddress) && $model->checkLong($model->gpsLong) && $model->checkDim($model->gpsDim)){
 			$model->save();
-			if($model->staId){		
+			if($model->staId)
+			{		
 			// 保存图片
 			if ($this->request->hasFiles() == true) {
 	            foreach ($this->request->getUploadedFiles() as $file) {
@@ -78,7 +81,8 @@ class StadiumController extends Phalcon\Mvc\Controller
 		}
 		else{
 			
-			foreach ($model->getMessages() as $message) {
+			foreach ($model->getMessages() as $message) 
+			{
         		//echo $message. "\n";
     		}
 				$response->redirect("pictureList",true);
@@ -93,28 +97,31 @@ class StadiumController extends Phalcon\Mvc\Controller
 		
 	}
 	//场馆列表
-	public function stadiumListAction(){
-		//场馆信息
+	public function stadiumListAction()
+	{
+		
 		$model=new StadiumModel();
-		$data=$model->getStadiumList();
-		//公司信息
 		$companyList=new CompanyModel();
+		$stadiumName='';$stadiumAddress='';$belongComId='';
+		if($this->request->getPost('search')!='')
+		{
+			$stadiumName=$this->request->getPost('stadiumName');
+			$stadiumAddress=$this->request->getPost('stadiumAddress');
+			$belongComId=$this->request->getPost('belongComId');
+		}	//场馆信息
+		$data=$model->getStadiumList($stadiumName,$stadiumAddress,$belongComId);
 		$array=$companyList->companyList();
-		//图片列表
-		$picture= new PictureModel();
-		$pictureList=$picture->staPicInfo();
-		//echo json_encode($pictureList); die();
-		$this->view->setVar('pictureList',json_encode($pictureList));
-		$comList=json_encode($array);
-		$this->view->setVar('companyList',$comList);
+		$this->view->setVar('companyList',$array);
 		$jsonData=json_encode($data);
 		$this->view->setVar('jsonData',$jsonData);
 		
 	}
 	//场馆修改页面
-	public function editStadiumAction(){
+	public function editStadiumAction()
+	{
 		$response = new \Phalcon\Http\Response();
-		if($this->request->getPost('sub')==''){
+		if($this->request->getPost('sub')=='')
+		{
 		$model=new StadiumModel();
 		$staId=$this->request->get('id');
 		$staInfo=$model->findFirst('staId='.'"'.$staId.'"'.'')->toArray();
@@ -131,7 +138,8 @@ class StadiumController extends Phalcon\Mvc\Controller
 		$this->view->setVar('pictureInfo',$pictureInfo);
 		//echo '<pre>';var_dump($pictureInfo);
 		}
-		else{
+		else
+		{
 		$models=new StadiumModel();
 		$time=time();
 		$models->staId=$this->request->getPost('staId');
@@ -146,9 +154,11 @@ class StadiumController extends Phalcon\Mvc\Controller
 		$models->gpsDim=$this->request->getPost('gpsDim');
 		$models->addTime=$time;
 		if($models->checkstaAddress($models->staAddress) && $models->checkLong($models->gpsLong) && $models->checkDim($models->gpsDim))
-		{$result=$models->update();
+		{
+			$result=$models->update();
 		//echo '<pre>';var_dump($models);
-		if($result){
+		if($result)
+		{
 			$log=new LogModel();
 			//操作记录数据
 				$log->insertLog($content='修改场馆信息');
@@ -167,11 +177,13 @@ class StadiumController extends Phalcon\Mvc\Controller
 			 	
 			 	//$response->redirect("stadiumList");
 			}
-			else{
+			else
+			{
 			
 			}
 		}
-		else{
+		else
+		{
 			foreach ($models->getMessages() as $message){} ;
 				$response->redirect("stadiumList",true);
 				$response->setStatusCode(200, "OK");
@@ -187,7 +199,8 @@ class StadiumController extends Phalcon\Mvc\Controller
 		
 	}
 	//场馆信息删除
-	public function deleteStadiumAction(){
+	public function deleteStadiumAction()
+	{
 		$model=new StadiumModel();
 		$staid=$this->request->getPost('id');
 		$model->staId=$staid;

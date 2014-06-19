@@ -13,7 +13,8 @@ class LogController extends Phalcon\Mvc\Controller
 	{
 
 	}
-	public function logListAction(){
+	public function logListAction()
+	{
 		$model=new LogModel();
 		$data=$model->logList();
 		foreach ($data as $key=>$value){
