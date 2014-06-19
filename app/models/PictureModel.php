@@ -37,23 +37,15 @@ class PictureModel extends \Phalcon\Mvc\Model
 			return FALSE;
 		}
 	}
-	public function getAllPicInfo($stadiumName){
-		$condition='';
-		$condition.="1=1 ";
-		if($stadiumName!='')
-		{
-			$condition.=' and stadiumId ="'.$stadiumName.'"';
-		}
+	public function getAllPicInfo(){
 		$result = $this->modelsManager->createBuilder()
 			->columns('picId,staName,isCover,picUrl')
 		    ->from('PictureModel')
 		    ->join("StadiumModel",'StadiumModel.staId=PictureModel.stadiumId')
-			->where("$condition")
 			->orderby('picId')
 		    ->getQuery()
 		    ->execute()->toArray();	
-		//	echo '<pre>';var_dump($result);die();
-		return $result;	
+		    return $result;	
 	}
 	/**
 	 * return  statiumId  picId  picUrl

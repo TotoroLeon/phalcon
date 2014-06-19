@@ -29,7 +29,6 @@
         function f_initGrid()
         {
             g = manager = $("#maingrid").ligerGrid({
-            	height:'100%',
                 columns: [
                 { display: '公司编号', name: 'companyId', width: '20%', type: 'int',  },
                 { display: '公司名称', name: 'companyName',width: '50%',
@@ -57,7 +56,7 @@
                     $("#txtrowindex").val(rowindex);
                 },
                 enabledEdit: true,clickToEdit:false, isScroll: false,
-                data: EmployeeData,isScroll: true,
+                data: EmployeeData,
                 width: '100%'
             });   
         }
@@ -98,16 +97,26 @@
   				});
             }
         }
-        
+        var newrowid = 100;
+        function addNewRow()
+        {
+            manager.addEditRow();
+        } 
+         
+        function getSelected()
+        { 
+            var row = manager.getSelectedRow();
+            if (!row) { alert('请选择行'); return; }
+            alert(JSON.stringify(row));
+        }
+        function getData()
+        { 
+            var data = manager.getData();
+            alert(JSON.stringify(data));
+        } 
     </script>
  </head>    
-<body style="padding:6px; overflow:hidden;">
-	<div id="searchbar">
-	<form action="companyList" method="post">
-    公司名称：<input name="companyName" value="" type="text" />
-    <input id="btnOK" type="submit" name="search" value="search" />
-    </form>
-	</div>
-<div id="maingrid" ></div>
+<body>
+	<div id="maingrid" ></div>
 </body>
 </html>

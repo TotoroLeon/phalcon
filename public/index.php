@@ -25,14 +25,14 @@ try {
             "charset" =>'utf8'
         ));
     });
-	$di->setShared('session', function() {
-    $session = new Phalcon\Session\Adapter\Files();
-    $session->start();
-    return $session;
-	});
 
     //Setting up the view component
     $di->set('view', function(){
+        $view = new \Phalcon\Mvc\View();
+        $view->setViewsDir('../app/views/');
+        return $view;
+    });
+	$di->set('view', function(){
         $view = new \Phalcon\Mvc\View();
         $view->setViewsDir('../app/views/');
         return $view;

@@ -24,29 +24,13 @@ class StadiumModel extends Phalcon\Mvc\Model
 		$this->modelsManager=$this->getDI()->get('modelsManager');
         
     }
-	public function getStadiumList($stadiumName,$stadiumAddress,$belongComId)
-	{
-		$condition.="1=1 ";
-		if(!empty($stadiumName))
-		{
-			$condition.=' and staName like "%'.$stadiumName.'%"';
-		}
-		if(!empty($stadiumAddress))
-		{
-			$condition.=' and staAddress like "%'.$stadiumAddress.'%"';
-		} 
-		if(!empty($belongComId))
-		{
-			$condition.=' and belongComId ="'.$belongComId.'"';
-		}
+	public function getStadiumList(){
 		//return $this->userName;
-		//echo $condition;doe();
 		$stadium = $this->modelsManager->createBuilder()
 		->columns('staId,staName,staPicture,picUrl,staAddress,staSize,companyName')
 		->from('StadiumModel')
 		->join('CompanyModel','CompanyModel.companyId=StadiumModel.belongComId')
 		->join('PictureModel','PictureModel.picId=StadiumModel.staPicture')
-		->where("$condition")
 		->orderby('staId')
 		->getQuery()
 		->execute()

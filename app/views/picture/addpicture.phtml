@@ -104,7 +104,7 @@
         </table>
  <br />
  <input type="hidden" name="userId" value="<?php echo $userInfo["userId"];?>" />
- <input type="hidden" name="userIp" value="<?php echo ip2long($_SERVER["REMOTE_ADDR"]);?>" />
+ <input type="hidden" name="userIp" value="<?php echo $userInfo["userIp"];?>" />
  <input type="submit" value="提交" id="Button1" class="l-button l-button-submit" /> 
 <input type="button" value="测试" class="l-button l-button-test"/>
     </form>

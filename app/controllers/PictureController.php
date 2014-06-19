@@ -14,8 +14,7 @@ class PictureController extends Phalcon\Mvc\Controller
 
 	}
 	//添加图片页面
-	public function addPictureAction()
-	{
+	public function addPictureAction(){
 		//添加人
 		$model=new UserModel();
 		$value=$model->getUserInfo(2);
@@ -27,10 +26,11 @@ class PictureController extends Phalcon\Mvc\Controller
 		$stadium=new StadiumModel();
 		$stadiumList=$stadium->getStadiumNameList();
 		$this->view->setVar("stadiumList", $stadiumList);
+		
+		
 	}
 	//添加图片功能
-	public function addPictureFuncAction()
-	{
+	public function addPictureFuncAction(){
 	$response = new Phalcon\Http\Response();
 	$addUser=$this->request->getPost('userId');
 	$addIp=$this->request->getPost('userIp');
@@ -81,29 +81,19 @@ class PictureController extends Phalcon\Mvc\Controller
 		}
 	}
 	//图片列表
-	public function pictureListAction()
-	{
+	public function pictureListAction(){
 		$model= new PictureModel();
-		$stadium= new StadiumModel();
-		$stadiumName='';
-		if($this->request->getPost('stadiumName'))
-		{
-			$stadiumName=$this->request->getPost('stadiumName');
-		}
-		$value=$model->getAllPicInfo($stadiumName);
-		foreach ($value as $key=>$values)
-		{
+		$value=$model->getAllPicInfo();
+		foreach ($value as $key=>$values){
 			$value[$key]['isCover']=$value[$key]['isCover']==1?'是':'否';
 		}
-		$stadiumList=$stadium->getStadiumNameList();
 		$jsonData=json_encode($value);
-		$this->view->setVar('stadiumList',$stadiumList);
+		
 		$this->view->setVar('jsonData',$jsonData);
 		
 	}
 	//图片信息修改页面
-	public function editPictureAction()
-	{
+	public function editPictureAction(){
 		if($this->request->getPost('sub')==''){
 			$picId=$this->request->get('id');
 			$stadium= new StadiumModel();
@@ -159,13 +149,11 @@ class PictureController extends Phalcon\Mvc\Controller
 		
 	}
 	//图片信息修改功能
-	public function editPicInfoFuncAction()
-	{
+	public function editPicInfoFuncAction(){
 		
 	}
 	//图片删除功能
-	public function deletePicAction()
-	{
+	public function deletePicAction(){
 		$picId=$this->request->get('id');
 		$model= new PictureModel();
 		$model->picId=$picId;
