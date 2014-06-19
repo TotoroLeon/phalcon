@@ -1,13 +1,14 @@
 ﻿var indexdata = 
 [
-    { text: '网球场地管理',isexpand:false, children: [ 
-		{url:"Stadium/addStadium",text:"添加网球场地"},
-		{url:"Stadium/stadiumList",text:"查看网球场地信息"}
-	]
-    },
+	
     { text: '公司管理', isexpand: false, children: [
 		{ url: "Company/addCompany", text: "添加公司" },
 		{ url: "Company/companyList", text: "查看公司信息" }
+	]
+    },
+    { text: '网球场地管理',isexpand:false, children: [ 
+		{url:"Stadium/addStadium",text:"添加网球场地"},
+		{url:"Stadium/stadiumList",text:"查看网球场地信息"}
 	]
     }, 
 	{ text: '场地图片管理',isexpand:false, children: [ 
