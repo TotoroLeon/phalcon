@@ -2,32 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head><title>
 </title>  
-<script src="http://www.cnblogs.com/lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script> 
 <?php 
-    echo Phalcon\Tag::stylesheetLink("js/lib/ligerUI/skins/Aqua/css/ligerui-all.css"); 
-	echo Phalcon\Tag::javascriptInclude("js/lib/jquery/jquery-1.5.2.min.js");
-	echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/ligerui.min.js");
+    echo Phalcon\Tag::stylesheetLink("js/lib/ligerUI/skins/Aqua/css/ligerui-all.css");
+    echo Phalcon\Tag::javascriptInclude("js/lib/jquery/jquery-1.3.2.min.js");
+    echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/core/base.js");
+    echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/plugins/ligerDialog.js");
+    echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/plugins/ligerTextBox.js");
+    echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/plugins/ligerCheckBox.js");
+    echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/plugins/ligerComboBox.js");
+    echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/plugins/ligerGrid.js");
+    echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/plugins/ligerDateEditor.js");
+    echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/plugins/ligerSpinner.js");
     ?>
+    
  </head>    
-<body>
-	<div id="maingrid"></div>
-<a class="l-button" style="width:60px; float:left; margin-left:10px;" onclick="f_add()">添加</a>
-
-<a class="l-button" style="width:60px; float:left; margin-left:10px;" onclick="f_modify()">修改</a>
-
-<a class="l-button" style="width:60px; float:left; margin-left:10px;" onclick="f_delete()">删除</a>
-
-<a class="l-button" style="width:60px; float:left; margin-left:10px;" onclick="f_reload()">刷新</a>
- <div class="l-clear"></div>
-    <div id="maingrid" style="margin-top:20px"></div> <br />
-       <br /> 
-  <div style="display:none;">
-  	
+<body style="padding:6px; overflow:hidden;">
+	<div id="maingrid"></div>   	
   <script type="text/javascript">
-    var griddata = 
-	<?php echo $jsonData;?>
+    var griddata =<?php echo $jsonData;?>
 
      var grid = $("#maingrid").ligerGrid({
+     		height:'100%',
             columns: [
                 { name: 'lid', display: '记录编号', width: '10%' },
                 { name: 'userName', display: '操作人', width: '15%' },
@@ -36,10 +31,11 @@
                 { name: 'insertIp', display: '操作Ip', width: '20%' },
                 { name: 'typeId', display: '操作类型', width: '15%' }
             ],
-            data: { Rows: griddata }
+            data: { Rows: griddata },isScroll: true,pageSize:16,
+            width:'100%'
         }); 
 </script>
    <!-- g data total ttt -->
-</div>
+
 </body>
 </html>

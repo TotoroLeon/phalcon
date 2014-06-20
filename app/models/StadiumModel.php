@@ -24,13 +24,29 @@ class StadiumModel extends Phalcon\Mvc\Model
 		$this->modelsManager=$this->getDI()->get('modelsManager');
         
     }
-	public function getStadiumList(){
+	public function getStadiumList($stadiumName,$stadiumAddress,$belongComId)
+	{
+		$condition.="1=1 ";
+		if(!empty($stadiumName))
+		{
+			$condition.=' and staName like "%'.$stadiumName.'%"';
+		}
+		if(!empty($stadiumAddress))
+		{
+			$condition.=' and staAddress like "%'.$stadiumAddress.'%"';
+		} 
+		if(!empty($belongComId))
+		{
+			$condition.=' and belongComId ="'.$belongComId.'"';
+		}
 		//return $this->userName;
+		//echo $condition;doe();
 		$stadium = $this->modelsManager->createBuilder()
 		->columns('staId,staName,staPicture,picUrl,staAddress,staSize,companyName')
 		->from('StadiumModel')
 		->join('CompanyModel','CompanyModel.companyId=StadiumModel.belongComId')
 		->join('PictureModel','PictureModel.picId=StadiumModel.staPicture')
+		->where("$condition")
 		->orderby('staId')
 		->getQuery()
 		->execute()
@@ -38,7 +54,8 @@ class StadiumModel extends Phalcon\Mvc\Model
 		return $stadium;
 	}
 	//返回场地列表（一维）
-	public function getStadiumNameList(){
+	public function getStadiumNameList()
+	{
 		$stadiums= StadiumModel::find(array("columns"=>"staId,staName"))
 		->toArray();
 		$array=array();
@@ -47,7 +64,8 @@ class StadiumModel extends Phalcon\Mvc\Model
 		}
 		return $array;
 	}
-	public function checkstaName(){
+	public function checkstaName()
+	{
 		$this->validate(new PresenceOf(array(
           'field' => 'staName',
           'message' => '场馆名称不可为空!'
@@ -69,7 +87,8 @@ class StadiumModel extends Phalcon\Mvc\Model
 		return $this->validationHasFailed() != true;
 	}
 
-	public function checkstaAddress(){
+	public function checkstaAddress()
+	{
 		$this->validate(new PresenceOf(array(
           'field' => 'staAddress',
           'message' => '场馆地址不可为空!'
@@ -83,14 +102,16 @@ class StadiumModel extends Phalcon\Mvc\Model
 		)));
 	  return $this->validationHasFailed() != true;
 	}
-	public function checkLong(){
+	public function checkLong()
+	{
 	  $this->validate(new NumericalityValidator(array(
           'field' => "gpsLong",
           'message'=>'经度必须为数字!'
       )));
 		return $this->validationHasFailed() != true;
 	}
-	public function checkDim(){
+	public function checkDim()
+	{
 		$this->validate(new NumericalityValidator(array(
           'field' => "gpsDim",
           'message'=>'纬度必须为数字!'

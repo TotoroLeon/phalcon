@@ -13,7 +13,8 @@ class LogModel extends Phalcon\Mvc\Model
         $this->setSource("ten_log");
 		$this->modelsManager=$this->getDI()->get('modelsManager');
     }
-	public function insertLog($content='',$typeId=''){
+	public function insertLog($content='',$typeId='')
+	{
 		$this->insertBy=2;
 		$this->insertTime=time();
 		$this->content=$content;
@@ -22,7 +23,8 @@ class LogModel extends Phalcon\Mvc\Model
 		//echo date('Y-m-d H:i:s',$this->insertTime),$this->insertIp;die();
 		$this->save();
 	}
-	public function logList(){
+	public function logList()
+	{
 		$loglist= $this->modelsManager->createBuilder()
 				 ->columns('lid,userName,insertTime,content,insertIp,typeId')
 				 ->from("LogModel")

@@ -21,7 +21,8 @@ class PictureModel extends \Phalcon\Mvc\Model
 		
     }
 	
-	public function insertPicInfo($date=array()){
+	public function insertPicInfo($date=array())
+	{
 		//return $this->userName;
 		$this->stadiumId=$date['stadiumId'];
 		$this->isCover=$date['isCover'];
@@ -30,27 +31,39 @@ class PictureModel extends \Phalcon\Mvc\Model
 		$this->addTime=$date['addTime'];
 		$this->addIp=$date['addIp'];
 		$result=$this->save();
-		if($result){
+		if($result)
+		{
 			return TRUE;
 		}
-		else{
+		else
+		{
 			return FALSE;
 		}
 	}
-	public function getAllPicInfo(){
+	public function getAllPicInfo($stadiumName)
+	{
+		$condition='';
+		$condition.="1=1 ";
+		if($stadiumName!='')
+		{
+			$condition.=' and stadiumId ="'.$stadiumName.'"';
+		}
 		$result = $this->modelsManager->createBuilder()
 			->columns('picId,staName,isCover,picUrl')
 		    ->from('PictureModel')
 		    ->join("StadiumModel",'StadiumModel.staId=PictureModel.stadiumId')
+			->where("$condition")
 			->orderby('picId')
 		    ->getQuery()
 		    ->execute()->toArray();	
-		    return $result;	
+		//	echo '<pre>';var_dump($result);die();
+		return $result;	
 	}
 	/**
 	 * return  statiumId  picId  picUrl
 	 */
-	public function staPicInfo(){
+	public function staPicInfo()
+	{
 		$result=PictureModel::find(array("columns"=>"picId,stadiumId,picUrl"))->toArray();		
 		return $result;			
 	}

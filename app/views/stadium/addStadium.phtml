@@ -29,17 +29,43 @@
     </style>
     <script type="text/javascript">
     function check(){
-     var data=$(":input[name='companyName']").val();
-    	$.post("addCompanyFunc",{companyName:data},function(result){
-    			if(result=='1'){
-    				f_alert2('success');
-    				document.getElementById("companyName").value="";
-    			}
-    			else{
-    				alert('wrong');
-    			}
-  				});
-  			}
+     var staName=$(":input[name='staName']").val();
+     var picUrl=$(":input[name='picUrl']").val();
+     var staAddress=$(":input[name='staAddress']").val();
+     var staSize=$(":input[name='staSize']").val();
+     var gpsLong=$(":input[name='gpsLong']").val();
+     var gpsDim=$(":input[name='gpsDim']").val();
+     if (picUrl==''){
+     	document.getElementById("url").innerHTML='* 图片不能为空！';
+     	return false;
+     }
+     else 
+     if (staName==''){
+     	document.getElementById("name").innerHTML='* 场馆名称不能为空！';
+     	return false;
+     }
+     else if (staAddress==''){
+     	document.getElementById("address").innerHTML='* 场馆地址不能为空！';
+     	return false;
+     }
+     else if (staSize==''){
+     	document.getElementById("size").innerHTML='* 场馆容量不能为空！';
+     	return false;
+     }
+     else if (gpsLong==''){
+     	document.getElementById("long").innerHTML='* 经度不能为空！';
+     	return false;
+     	
+     }
+     else if (gpsDim==''){
+     	document.getElementById("dim").innerHTML='* 纬度不能为空！';
+     	return false;
+     }
+     
+    else {
+			return true;
+  		}
+  		}
     </script>
 
 </head>
@@ -60,43 +86,49 @@
                 <td align="right" class="l-table-edit-td" valign="top">上传封面图片:</td>
                 <td align="left" class="l-table-edit-td">
                 <input type="file" name="picUrl"/>
+                <label id='url' style="color:red"></label>
                  </td><td align="left"></td>
             </tr>   
              <tr>
                 <td align="right" class="l-table-edit-td">场馆名称:</td>
                 <td align="left" class="l-table-edit-td">
                 <?php echo Phalcon\Tag::textField(array("staName", "size" => 20)); ?>
+                <label id="name"style="color:red"></label>
                 <td align="left"></td>
             </tr>
             <tr>
                 <td align="right" class="l-table-edit-td">场馆地址:</td>
                 <td align="left" class="l-table-edit-td">
                 <?php echo Phalcon\Tag::textField(array("staAddress", "size" => 30)); ?>
+                <label id="address"style="color:red"></label>
                 <td align="left"></td>
             </tr>
             <tr>
                 <td align="right" class="l-table-edit-td">场馆容量:</td>
                 <td align="left" class="l-table-edit-td">
                 <?php echo Phalcon\Tag::textField(array("staSize", "size" => 20)); ?>
+                <label id='size'style="color:red"></label>
                 <td align="left"></td>
             </tr>
             <tr>
                 <td align="right" class="l-table-edit-td">场馆经度:</td>
                 <td align="left" class="l-table-edit-td">
                 <?php echo Phalcon\Tag::textField(array("gpsLong", "size" => 10)); ?>
+                <label id='long'style="color:red"></label>
                 <td align="left"></td>
             </tr>
             <tr>
                 <td align="right" class="l-table-edit-td">场馆纬度:</td>
                 <td align="left" class="l-table-edit-td">
                 <?php echo Phalcon\Tag::textField(array("gpsDim", "size" => 10)); ?>
+                <label id='dim'style="color:red"></label>
                 <td align="left"></td>
             </tr>
         </table>
  <br />
  <input type="hidden" name="addUser" value="<?php echo $userInfo['userId'];?>">
  <input type="hidden" name="addIp" value="<?php echo $userInfo['userIp'];?>">
-<input type="submit" value="提交" id="Button1" class="l-button l-button-submit" /> 
+<input type="submit" value="提交" id="Button1" class="l-button l-button-submit" onclick="return check()"/> 
 <input type="button" value="测试" class="l-button l-button-test"/>
     </form>
     <div style="display:none">

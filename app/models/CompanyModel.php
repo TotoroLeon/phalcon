@@ -11,31 +11,47 @@ class CompanyModel extends Phalcon\Mvc\Model
         $this->setSource("ten_company");
     }
     //插入公司名称
-	public function insertCompany(){
-		if($this->check($this->companyName)){
+	public function insertCompany()
+	{
+		if($this->check($this->companyName))
+		{
 			$this->save();
 			return true;
 		}
-		else{
-			foreach ($this->getMessages() as $message) {
+		else
+		{
+			foreach ($this->getMessages() as $message) 
+			{
         		echo $message, "\n";
     		}
 		}
 	}
 	//返回公司列表(二维)
-	public function companyList(){
+	public function companyList()
+	{
 		$companylist= CompanyModel::find()->toArray();
 		return $companylist;
 	}
 	//返回公司名称列表
-	public function CompanyListOne(){
+	public function CompanyListOne()
+	{
 		$company= CompanyModel::find()->toArray();
 		$array=array();
-		foreach ($company as $stu) {
+		foreach ($company as $stu) 
+		{
     		$array[$stu['companyId']]=$stu['companyName'];
 		}
 		return $array;
 	}
+	//Search
+	public function searchCompanyName($value)
+	{
+		$company= CompanyModel::find(array("conditions" => "companyName LIKE '%".$value."%' "))->toArray();
+		//$array=array();
+		
+		return $company;
+	}
+	
 	public function check()
     {
 		//不能为空

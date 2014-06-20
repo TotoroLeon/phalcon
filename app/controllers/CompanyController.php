@@ -14,11 +14,13 @@ class CompanyController extends Phalcon\Mvc\Controller
 
 	}
 	//添加公司页面
-	public function addCompanyAction(){
+	public function addCompanyAction()
+	{
 		
 	}
 	//添加公司功能
-	public function addCompanyFuncAction(){
+	public function addCompanyFuncAction()
+	{
 		$companyName=$this->request->getPost('companyName');
 		$model=new CompanyModel();
 		$model->companyName=$companyName;
@@ -34,14 +36,25 @@ class CompanyController extends Phalcon\Mvc\Controller
 		}
 	}
 	//公司列表
-	public function companyListAction(){
+	public function companyListAction()
+	{
+		
 		$model=new CompanyModel();
-		$data=$model->companyList();
+		if($this->request->getPost('search') && $this->request->getPost('companyName'))
+		{
+			$data=$model->searchCompanyName($this->request->getPost('companyName'));
+		}
+		else
+		{
+			$data=$model->companyList();
+		}
 		$jsonData=json_encode($data);
+		//die($jsonData);
 		$this->view->setVar('jsonData',$jsonData);
 	}
 	//公司名称修改
-	public function editCompanyAction(){
+	public function editCompanyAction()
+	{
 		$jsonData=$this->request->getPost('jsonData');	
 		$result="";	
 		$array=json_decode($jsonData,true);
@@ -59,30 +72,35 @@ class CompanyController extends Phalcon\Mvc\Controller
     			}
 			}
 		}
-		if($result=='1'){
+		if($result=='1')
+		{
 			$log=new LogModel();
 			//操作记录数据
 			$log->insertLog($content='修改公司名称');
 			echo '1';
 		}
-		else{
+		else
+		{
 			echo $result;
 		}
 		die();
 		
 	}
 	//公司信息删除
-	public function deleteCompanyAction(){
+	public function deleteCompanyAction()
+	{
 		$model=new CompanyModel();
 		$model->companyId=$this->request->getPost('id');
 		$result=$model->delete();
-		if($result){
+		if($result)
+		{
 			$log=new LogModel();
 			//操作记录数据
 			$log->insertLog($content='删除一个公司信息');
 			echo '1';
 		}
-		else{
+		else
+		{
 			echo '0';
 		}
 		die();

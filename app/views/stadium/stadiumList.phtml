@@ -7,7 +7,6 @@
     //echo Phalcon\Tag::javascriptInclude("js/lib/DepartmentData.js");
 	echo Phalcon\Tag::stylesheetLink("js/lib/ligerUI/skins/Aqua/css/ligerui-all.css");
     echo Phalcon\Tag::javascriptInclude("js/lib/jquery/jquery-1.3.2.min.js");
-    echo Phalcon\Tag::javascriptInclude("js/lib/json2.js");
     echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/core/base.js");
     echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/plugins/ligerDialog.js");
     echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/plugins/ligerTextBox.js");
@@ -17,7 +16,6 @@
     echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/plugins/ligerDateEditor.js");
     echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/plugins/ligerSpinner.js");
     echo Phalcon\Tag::stylesheetLink("js/lib/ligerUI/skins/ligerui-icons.css");
-    //echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/core/base.js");
     echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/plugins/ligerDrag.js");
     echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/plugins/ligerResizable.js");
     ?>
@@ -29,7 +27,8 @@
         var manager, g;
         function f_initGrid()
         {
-            g = manager = $("#maingrid").ligerGrid({
+            g = manager = $("#maingrid4").ligerGrid({
+            	height:'100%',
                 columns: [
                 { name: 'staId', display: '场地编号', width: '5%' },
                 { name: 'staName', display: '场地名称', width: '15%' },
@@ -59,9 +58,9 @@
                 {
                     $("#txtrowindex").val(rowindex);
                 },
-                enabledEdit: true,clickToEdit:false, isScroll: false,
-                data: EmployeeData,
-                width: '100%'
+                enabledEdit: true,clickToEdit:false, isScroll: true,
+                data: EmployeeData,pageSize:16,
+                width: '100%',
             });   
         }
         function f_open(rowindex,trueid)
@@ -94,33 +93,30 @@
             }
         }
         var newrowid = 100;
-        function addNewRow()
-        {
-            manager.addEditRow();
-        } 
-         
-        function getSelected()
-        { 
-            var row = manager.getSelectedRow();
-            if (!row) { alert('请选择行'); return; }
-            alert(JSON.stringify(row));
+        function reload(){
+        	window.location.reload();
         }
-        function getData()
-        { 
-            var data = manager.getData();
-            alert(JSON.stringify(data));
-        } 
     </script>
  </head>    
-<body>
-	<div id="maingrid"></div>
-
-    <div id="maingrid" style="margin-top:20px"></div> <br />
-       <br /> 
-  <div style="display:none;">
-  	
- 
-   <!-- g data total ttt -->
+<body style="padding:6px; overflow:hidden;">
+<div id="searchbar">
+	<form action="stadiumList" method="post">
+    场地名称： <input name="stadiumName" value="" type="text" />&nbsp;&nbsp;
+    场地地址： <input name="stadiumAddress" value="" type="text" />&nbsp;&nbsp;
+    公司名称: <select name="belongComId">
+    	<option  value="0">---请选择---</option>
+    	<?php
+    	foreach ($companyList as $key => $value) {
+			echo '<option  value="'.$value['companyId'].'">'.$value['companyName'].'</option>';
+		}
+    	?>
+    </select>
+    &nbsp;&nbsp;&nbsp;
+    <input id="btnOK" type="submit" name="search" value=" 查询 " />
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    </form>
 </div>
+    <div id="maingrid4" style="margin-top:5px;"></div> <br />
+       <br /> 
 </body>
 </html>

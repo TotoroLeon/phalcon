@@ -8,7 +8,8 @@ class UserModel extends Phalcon\Mvc\Model
     {
         $this->setSource("ten_user");
     }
-	public function getUserInfo($id=1){
+	public function getUserInfo($id=1)
+	{
 		//return $this->userName;
 		$user = UserModel::findFirst($id);
 		$array['userId']=$user->userId;

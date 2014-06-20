@@ -14,7 +14,8 @@ class PictureController extends Phalcon\Mvc\Controller
 
 	}
 	//添加图片页面
-	public function addPictureAction(){
+	public function addPictureAction()
+	{
 		//添加人
 		$model=new UserModel();
 		$value=$model->getUserInfo(2);
@@ -26,11 +27,10 @@ class PictureController extends Phalcon\Mvc\Controller
 		$stadium=new StadiumModel();
 		$stadiumList=$stadium->getStadiumNameList();
 		$this->view->setVar("stadiumList", $stadiumList);
-		
-		
 	}
 	//添加图片功能
-	public function addPictureFuncAction(){
+	public function addPictureFuncAction()
+	{
 	$response = new Phalcon\Http\Response();
 	$addUser=$this->request->getPost('userId');
 	$addIp=$this->request->getPost('userIp');
@@ -38,10 +38,12 @@ class PictureController extends Phalcon\Mvc\Controller
 	$isCover=$this->request->getPost('isCover');
 	$addTime=time();
 	$picUrl=time().'.jpg';
-	if($this->request->hasFiles()==true && $stadiumId!=''){
+	if($this->request->hasFiles()==true && $stadiumId!='')
+	{
 	//上传图片
 	 //if ($this->request->hasFiles() == true) {
-            foreach ($this->request->getUploadedFiles() as $file) {
+            foreach ($this->request->getUploadedFiles() as $file) 
+            {
                 $file->moveTo('images/' . $picUrl);
             }
        // }
@@ -49,7 +51,8 @@ class PictureController extends Phalcon\Mvc\Controller
 		//图片数据
 		$data=array('addUser'=>$addUser,'addIp'=>$addIp,'addTime'=>$addTime,'stadiumId'=>$stadiumId,'isCover'=>$isCover,'picUrl'=>$picUrl);
 		$result=$picture->insertPicInfo($data);
-		if($result){
+		if($result)
+		{
 			//保存操作记录
 			$log=new LogModel();
 			//操作记录数据
@@ -65,11 +68,13 @@ class PictureController extends Phalcon\Mvc\Controller
 				$response->send();
 			 $this->flash->success('success');
 		}
-		else{
+		else
+		{
 			$this->flash->error('error');
 		}
 		}
-		else{
+		else
+		{
 			$response->redirect("pictureList",true);
 				$response->setStatusCode(200, "OK");
 				$response->setContent('<html><body>
@@ -81,19 +86,29 @@ class PictureController extends Phalcon\Mvc\Controller
 		}
 	}
 	//图片列表
-	public function pictureListAction(){
+	public function pictureListAction()
+	{
 		$model= new PictureModel();
-		$value=$model->getAllPicInfo();
-		foreach ($value as $key=>$values){
+		$stadium= new StadiumModel();
+		$stadiumName='';
+		if($this->request->getPost('stadiumName'))
+		{
+			$stadiumName=$this->request->getPost('stadiumName');
+		}
+		$value=$model->getAllPicInfo($stadiumName);
+		foreach ($value as $key=>$values)
+		{
 			$value[$key]['isCover']=$value[$key]['isCover']==1?'是':'否';
 		}
+		$stadiumList=$stadium->getStadiumNameList();
 		$jsonData=json_encode($value);
-		
+		$this->view->setVar('stadiumList',$stadiumList);
 		$this->view->setVar('jsonData',$jsonData);
 		
 	}
 	//图片信息修改页面
-	public function editPictureAction(){
+	public function editPictureAction()
+	{
 		if($this->request->getPost('sub')==''){
 			$picId=$this->request->get('id');
 			$stadium= new StadiumModel();
@@ -141,7 +156,8 @@ class PictureController extends Phalcon\Mvc\Controller
 				</body></html>');
 				$response->send();
 			}
-			else{
+			else
+			{
 				
 			}
 			die();
@@ -149,11 +165,13 @@ class PictureController extends Phalcon\Mvc\Controller
 		
 	}
 	//图片信息修改功能
-	public function editPicInfoFuncAction(){
+	public function editPicInfoFuncAction()
+	{
 		
 	}
 	//图片删除功能
-	public function deletePicAction(){
+	public function deletePicAction()
+	{
 		$picId=$this->request->get('id');
 		$model= new PictureModel();
 		$model->picId=$picId;

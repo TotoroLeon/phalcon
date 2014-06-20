@@ -22,6 +22,8 @@
     echo Phalcon\Tag::javascriptInclude("js/lib/jquery-validation/messages_cn.js");
     echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/plugins/ligerDrag.js");
     echo Phalcon\Tag::javascriptInclude("js/lib/ligerUI/js/plugins/ligerDialog.js");
+    echo Phalcon\Tag::javascriptInclude("js/lib/jquery-validation/jquery.metadata.js" );
+    echo Phalcon\Tag::javascriptInclude("js/lib/jquery-validation/messages_cn.js" );
 	
     ?>
     <style type="text/css">
@@ -54,6 +56,8 @@
     <script language="JavaScript">
     function check(){
      var data=$(":input[name='companyName']").val();
+     if(data!='')
+     {
     	$.post("addCompanyFunc",{companyName:data},function(result){
     			if(result==true){
     				f_alert2('success',result);
@@ -65,6 +69,10 @@
     			}
   				});
   			}
+  		else{
+  			document.getElementById("info").innerHTML='*公司名称不能为空！';
+  		}
+  		}	
     </script>
 
 </head>
@@ -78,7 +86,8 @@
             <tr>
                 <td align="right" class="l-table-edit-td">公司名称 :</td>
                 <td align="left" class="l-table-edit-td">
-                <?php echo Phalcon\Tag::textField(array("companyName", "size" => 30));?>
+                <?php echo Phalcon\Tag::textField(array("companyName", "size" => 30,"validate"=>'{required:true,minlength:3,maxlength:10}'));?>
+				<label id='info' style="color: red"></label>
 				<td align="left"></td>
             </tr>
         </table>
