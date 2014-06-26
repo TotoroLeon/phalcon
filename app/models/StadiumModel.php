@@ -1,9 +1,10 @@
 <?php
-use Phalcon\Mvc\Model\Validator\PresenceOf;
-use	Phalcon\Mvc\Model\Validator\Uniqueness;
-use Phalcon\Mvc\Model\Validator\StringLength as StringLengthValidator;
-use Phalcon\Mvc\Model\Validator\Numericality as NumericalityValidator;
-class StadiumModel extends Phalcon\Mvc\Model
+use \Phalcon\Mvc\Model;
+use \Phalcon\Mvc\Model\Validator\PresenceOf;
+use	\Phalcon\Mvc\Model\Validator\Uniqueness;
+use \Phalcon\Mvc\Model\Validator\StringLength as StringLengthValidator;
+use \Phalcon\Mvc\Model\Validator\Numericality as NumericalityValidator;
+class StadiumModel extends Model
 {
 	public $staId;
 	public $belongComId;
@@ -27,39 +28,40 @@ class StadiumModel extends Phalcon\Mvc\Model
 	public function getStadiumList($stadiumName,$stadiumAddress,$belongComId)
 	{
 		$condition.="1=1 ";
-		if(!empty($stadiumName))
+		if (!empty($stadiumName))
 		{
 			$condition.=' and staName like "%'.$stadiumName.'%"';
 		}
-		if(!empty($stadiumAddress))
+		if (!empty($stadiumAddress))
 		{
 			$condition.=' and staAddress like "%'.$stadiumAddress.'%"';
 		} 
-		if(!empty($belongComId))
+		if (!empty($belongComId))
 		{
 			$condition.=' and belongComId ="'.$belongComId.'"';
 		}
 		//return $this->userName;
 		//echo $condition;doe();
 		$stadium = $this->modelsManager->createBuilder()
-		->columns('staId,staName,staPicture,picUrl,staAddress,staSize,companyName')
-		->from('StadiumModel')
-		->join('CompanyModel','CompanyModel.companyId=StadiumModel.belongComId')
-		->join('PictureModel','PictureModel.picId=StadiumModel.staPicture')
-		->where("$condition")
-		->orderby('staId')
-		->getQuery()
-		->execute()
-		->toArray();
+					->columns('staId,staName,staPicture,picUrl,staAddress,staSize,companyName')
+					->from('StadiumModel')
+					->join('CompanyModel','CompanyModel.companyId=StadiumModel.belongComId')
+					->join('PictureModel','PictureModel.picId=StadiumModel.staPicture')
+					->where("$condition")
+					->orderby('staId')
+					->getQuery()
+					->execute()
+					->toArray();
 		return $stadium;
 	}
 	//返回场地列表（一维）
 	public function getStadiumNameList()
 	{
-		$stadiums= StadiumModel::find(array("columns"=>"staId,staName"))
+		$stadiums = StadiumModel::find(array("columns"=>"staId,staName"))
 		->toArray();
-		$array=array();
-		foreach ($stadiums as $stu) {
+		$array = array();
+		foreach ($stadiums as $stu) 
+		{
     		$array[$stu['staId']]=$stu['staName'];
 		}
 		return $array;

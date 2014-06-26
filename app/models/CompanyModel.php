@@ -1,8 +1,9 @@
 <?php
-use Phalcon\Mvc\Model\Validator\PresenceOf;
-use	Phalcon\Mvc\Model\Validator\Uniqueness;
-use Phalcon\Mvc\Model\Validator\StringLength as StringLengthValidator;
-class CompanyModel extends Phalcon\Mvc\Model
+use \Phalcon\Mvc\Model as Model;
+use \Phalcon\Mvc\Model\Validator\PresenceOf;
+use	\Phalcon\Mvc\Model\Validator\Uniqueness;
+use \Phalcon\Mvc\Model\Validator\StringLength as StringLengthValidator;
+class CompanyModel extends Model
 {
 	public $companyId;
 	public $companyName;
@@ -13,7 +14,7 @@ class CompanyModel extends Phalcon\Mvc\Model
     //插入公司名称
 	public function insertCompany()
 	{
-		if($this->check($this->companyName))
+		if ($this->check($this->companyName))
 		{
 			$this->save();
 			return true;
@@ -35,8 +36,8 @@ class CompanyModel extends Phalcon\Mvc\Model
 	//返回公司名称列表
 	public function CompanyListOne()
 	{
-		$company= CompanyModel::find()->toArray();
-		$array=array();
+		$company = CompanyModel::find()->toArray();
+		$array = array();
 		foreach ($company as $stu) 
 		{
     		$array[$stu['companyId']]=$stu['companyName'];
@@ -46,9 +47,8 @@ class CompanyModel extends Phalcon\Mvc\Model
 	//Search
 	public function searchCompanyName($value)
 	{
-		$company= CompanyModel::find(array("conditions" => "companyName LIKE '%".$value."%' "))->toArray();
+		$company = CompanyModel::find(array("conditions" => "companyName LIKE '%".$value."%' "))->toArray();
 		//$array=array();
-		
 		return $company;
 	}
 	
@@ -62,9 +62,9 @@ class CompanyModel extends Phalcon\Mvc\Model
 	  //判断重复
      	 $this->validate(new Uniqueness(
             array(
-                "field"   => "companyName",
-                "message" => "名称重复,请重新添加!"
-            )
+                	"field"   => "companyName",
+                	"message" => "名称重复,请重新添加!"
+            	)
         ));
 		//判断一个字符串的长度
 		$this->validate(new StringLengthValidator(array(

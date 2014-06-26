@@ -1,6 +1,6 @@
 <?php
-
-class PictureModel extends \Phalcon\Mvc\Model
+use \Phalcon\Mvc\Model ;
+class PictureModel extends Model
 {
 	public $picId;
 	public $stadiumId;
@@ -24,13 +24,13 @@ class PictureModel extends \Phalcon\Mvc\Model
 	public function insertPicInfo($date=array())
 	{
 		//return $this->userName;
-		$this->stadiumId=$date['stadiumId'];
-		$this->isCover=$date['isCover'];
-		$this->picUrl=$date['picUrl'];
-		$this->addUser=$date['addUser'];
-		$this->addTime=$date['addTime'];
-		$this->addIp=$date['addIp'];
-		$result=$this->save();
+		$this->stadiumId = $date['stadiumId'];
+		$this->isCover = $date['isCover'];
+		$this->picUrl = $date['picUrl'];
+		$this->addUser = $date['addUser'];
+		$this->addTime = $date['addTime'];
+		$this->addIp = $date['addIp'];
+		$result = $this->save();
 		if($result)
 		{
 			return TRUE;
@@ -42,9 +42,9 @@ class PictureModel extends \Phalcon\Mvc\Model
 	}
 	public function getAllPicInfo($stadiumName)
 	{
-		$condition='';
+		$condition = '';
 		$condition.="1=1 ";
-		if($stadiumName!='')
+		if ($stadiumName!='')
 		{
 			$condition.=' and stadiumId ="'.$stadiumName.'"';
 		}

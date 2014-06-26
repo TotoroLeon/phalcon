@@ -6,9 +6,14 @@
  * 
  * =============================
  */
-class StadiumController extends Phalcon\Mvc\Controller 
+use \Phalcon\Mvc\Controller;
+use \Phalcon\Http\Response;
+class StadiumController extends Controller 
 {
-
+	public function initialize()
+	{
+		
+	}
 	public function indexAction()
 	{
 
@@ -18,53 +23,62 @@ class StadiumController extends Phalcon\Mvc\Controller
 	public function addStadiumAction()
 	{
 		//添加人
-		$model=new UserModel();
-		$value=$model->getUserInfo(2);
+		$model = new UserModel();
+		$value = $model->getUserInfo($this->session->get('userId'));
 		//添加人的ip
-		$ip=ip2long($_SERVER["REMOTE_ADDR"]);
+		$ip = ip2long($_SERVER["REMOTE_ADDR"]);
 		$value['userIp']=$ip;
 		$this->view->setVar("userInfo", $value);
 		//所有公司
-		$company=new CompanyModel();
-		$companylist=$company->CompanyListOne();
+		$company = new CompanyModel();
+		$companylist = $company->CompanyListOne();
 		$this->view->setVar('companyList',$companylist);
 	}
 	//添加场馆功能
 	public function addStadiumFuncAction()
 	{
-		$model=new StadiumModel();
-		$response = new Phalcon\Http\Response();
-		$time=time();
-		$model->belongComId=$this->request->getPost('belongComId');
-		$model->addUser=$this->request->getPost('addUser');
-		$model->addIp=$this->request->getPost('addIp');
-		$model->staName=$this->request->getPost('staName');
-		$model->staAddress=$this->request->getPost('staAddress');
-		$model->staSize=$this->request->getPost('staSize');
-		$model->gpsLong=$this->request->getPost('gpsLong');
-		$model->gpsDim=$this->request->getPost('gpsDim');
-		$model->addTime=$time;
-		if($model->checkstaName($model->staName) && $model->checkstaAddress($model->staAddress) && $model->checkLong($model->gpsLong) && $model->checkDim($model->gpsDim)){
+		$model = new StadiumModel();
+		$response = new \Phalcon\Http\Response();
+		$time = time();
+		$model->belongComId = $this->request->getPost('belongComId');
+		$model->addUser = $this->request->getPost('addUser');
+		$model->addIp = $this->request->getPost('addIp');
+		$model->staName = $this->request->getPost('staName');
+		$model->staAddress = $this->request->getPost('staAddress');
+		$model->staSize = $this->request->getPost('staSize');
+		$model->gpsLong = $this->request->getPost('gpsLong');
+		$model->gpsDim = $this->request->getPost('gpsDim');
+		$model->addTime = $time;
+		if ($model->checkstaName($model->staName) AND $model->checkstaAddress($model->staAddress) AND $model->checkLong($model->gpsLong) AND $model->checkDim($model->gpsDim))
+		{
 			$model->save();
 			if($model->staId)
 			{		
 			// 保存图片
 			if ($this->request->hasFiles() == true) {
 	            foreach ($this->request->getUploadedFiles() as $file) {
-	                $file->moveTo('images/' . $time.'.jpg');
+	            	$array=explode('.', $file->getName());
+				$extension=array_pop($array);
+				//echo 'images/' . $picUrl.'.'.$extension;die();
+                $file->moveTo('images/' . $time.'.'.$extension);
+				$image2=new Phalcon\Image\Adapter\GD("images/logo.jpg");
+				$picUrl=$time.'.'.$extension;
+				$image = new Phalcon\Image\Adapter\GD("images/".$picUrl);
+				$image->resize(600, 400)->watermark ($image2,200,320,80)->save();
 	            }
 	        }
         	$picture = new PictureModel();
 			//图片数据
-			$data=array('addUser'=>$model->addUser,'addIp'=>$model->addIp,'addTime'=>$model->addTime,'stadiumId'=>$model->staId,'isCover'=>'1','picUrl'=>$time.'.jpg');
+			$data=array('addUser'=>$model->addUser,'addIp'=>$model->addIp,'addTime'=>$model->addTime,'stadiumId'=>$model->staId,'isCover'=>'1','picUrl'=>$picUrl);
 			$result=$picture->insertPicInfo($data);
 			$picture->save();
-			$model->staPicture=$picture->picId;
-			$check=$model->update();
-			if($check){
-			$log=new LogModel();
+			$model->staPicture = $picture->picId;
+			$check = $model->update();
+			if($check)
+			{
+			$log = new LogModel();
 			//操作记录数据
-				$log->insertLog($content='添加场馆，添加封面');
+				$log->insertLog($this->session->get('userId'),$content='添加场馆，添加封面');
 				$response->redirect("pictureList",true);
 				$response->setStatusCode(200, "OK");
 				$response->setContent('<html><body>
@@ -75,7 +89,8 @@ class StadiumController extends Phalcon\Mvc\Controller
 				$response->send();
 			}
 		}
-		else{
+		else
+		{
 		    $this->flash->success('false');
 		}
 		}
@@ -120,23 +135,23 @@ class StadiumController extends Phalcon\Mvc\Controller
 	public function editStadiumAction()
 	{
 		$response = new \Phalcon\Http\Response();
-		if($this->request->getPost('sub')=='')
+		if($this->request->getPost('sub') == '')
 		{
-		$model=new StadiumModel();
-		$staId=$this->request->get('id');
-		$staInfo=$model->findFirst('staId='.'"'.$staId.'"'.'')->toArray();
-		//公司信息
-		$company=new CompanyModel();
-		$companyInfo=$company->CompanyListOne();
-		//图片信息
-		$picture= new PictureModel();
-		$pictureInfo=$picture->find('stadiumId='.'"'.$staId.'"'.'')->toArray();;
-		$this->view->setVar('staInfo',$staInfo);
-		//echo '<pre>';var_dump($staInfo);die();
-		$this->view->setVar('companyInfo',$companyInfo);
-		//echo '<pre>';var_dump($companyInfo);
-		$this->view->setVar('pictureInfo',$pictureInfo);
-		//echo '<pre>';var_dump($pictureInfo);
+			$model=new StadiumModel();
+			$staId=$this->request->get('id');
+			$staInfo=$model->findFirst('staId='.'"'.$staId.'"')->toArray();
+			//公司信息
+			$company=new CompanyModel();
+			$companyInfo=$company->CompanyListOne();
+			//图片信息
+			$picture= new PictureModel();
+			$pictureInfo=$picture->find('stadiumId='.'"'.$staId.'"'.'')->toArray();;
+			$this->view->setVar('staInfo',$staInfo);
+			//echo '<pre>';var_dump($staInfo);die();
+			$this->view->setVar('companyInfo',$companyInfo);
+			//echo '<pre>';var_dump($companyInfo);
+			$this->view->setVar('pictureInfo',$pictureInfo);
+			//echo '<pre>';var_dump($pictureInfo);
 		}
 		else
 		{
@@ -153,7 +168,7 @@ class StadiumController extends Phalcon\Mvc\Controller
 		$models->gpsLong=$this->request->getPost('gpsLong');
 		$models->gpsDim=$this->request->getPost('gpsDim');
 		$models->addTime=$time;
-		if($models->checkstaAddress($models->staAddress) && $models->checkLong($models->gpsLong) && $models->checkDim($models->gpsDim))
+		if($models->checkstaAddress($models->staAddress) AND $models->checkLong($models->gpsLong) AND $models->checkDim($models->gpsDim))
 		{
 			$result=$models->update();
 		//echo '<pre>';var_dump($models);
@@ -161,7 +176,7 @@ class StadiumController extends Phalcon\Mvc\Controller
 		{
 			$log=new LogModel();
 			//操作记录数据
-				$log->insertLog($content='修改场馆信息');
+				$log->insertLog($this->session->get('userId'),$content='修改场馆信息');
 			 	//$this->flash->success('success');
 			 	//跳转
 			 	//echo '<script>setTimeout("window.opener = "xxx";window.close();;",1000);</script>';
@@ -184,7 +199,7 @@ class StadiumController extends Phalcon\Mvc\Controller
 		}
 		else
 		{
-			foreach ($models->getMessages() as $message){} ;
+			    foreach ($models->getMessages() as $message){} ;
 				$response->redirect("stadiumList",true);
 				$response->setStatusCode(200, "OK");
 				$response->setContent('<html><body>
@@ -201,32 +216,34 @@ class StadiumController extends Phalcon\Mvc\Controller
 	//场馆信息删除
 	public function deleteStadiumAction()
 	{
-		$model=new StadiumModel();
-		$staid=$this->request->getPost('id');
-		$model->staId=$staid;
+		$model = new StadiumModel();
+		$staid = $this->request->getPost('id');
+		$model->staId = $staid;
 		//删除场馆
-		$checkone=$model->delete();
+		$checkone = $model->delete();
 		//删除场馆图片
-		$picture= new PictureModel();
-		$array=$picture->find('stadiumId="'.$staid.'"')->toArray();
+		$picture = new PictureModel();
+		$array = $picture->find('stadiumId="'.$staid.'"')->toArray();
 		//var_dump($array);die();
 		foreach ($array as $key => $value) {
-				$url='images/'.$value["picUrl"];
-				$resouse=@unlink("$url");
+				$url = 'images/'.$value["picUrl"];
+				$resouse = @unlink("$url");
 		}
-		$picture->stadiumId=$staid;
-		$checktwo=$picture->delete();
+		$picture->stadiumId = $staid;
+		$checktwo = $picture->delete();
 		
-		if($checkone && $checktwo){
+		if ($checkone AND $checktwo)
+		{
 			$log=new LogModel();
 			//操作记录数据
-			$log->insertLog($content='删除场馆');
+			$log->insertLog($this->session->get('userId'),$content='删除场馆');
 			echo '1';
 		}
-		else{
+		else
+		{
 			echo '0';
 		}
-		die();
+		die ();
 	}
 
 }

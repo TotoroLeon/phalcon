@@ -1,6 +1,6 @@
 <?php
-
-class LogModel extends Phalcon\Mvc\Model
+use \Phalcon\Mvc\Model ;
+class LogModel extends Model
 {
 	public $insertBy;
 	public $insertTime;
@@ -13,9 +13,9 @@ class LogModel extends Phalcon\Mvc\Model
         $this->setSource("ten_log");
 		$this->modelsManager=$this->getDI()->get('modelsManager');
     }
-	public function insertLog($content='',$typeId='')
+	public function insertLog($uid='1',$content='',$typeId='')
 	{
-		$this->insertBy=2;
+		$this->insertBy=$uid;
 		$this->insertTime=time();
 		$this->content=$content;
 		$this->insertIp=ip2long($_SERVER["REMOTE_ADDR"]);

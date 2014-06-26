@@ -109,7 +109,7 @@
 <div id="topmenu" class="l-topmenu">
     <div class="l-topmenu-logo">网球场地管理CMS</div>
     <div class="l-topmenu-welcome">
-        <a href="index.aspx" class="l-link2">用户：{{userId}}</a>
+        <a href="index.aspx" class="l-link2">用户：<?php echo $userId; ?></a>
         <span class="space">|</span>
         <a href="https://me.alipay.com/daomi" class="l-link2" target="_blank">捐赠</a> 
         <span class="space">|</span>

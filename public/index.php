@@ -10,8 +10,8 @@ try {
         $config->application->pluginsDir,
         $config->application->libraryDir,
         $config->application->modelsDir
-    )
-)->register();
+    	)
+	)->register();
     //Create a DI
     $di = new Phalcon\DI\FactoryDefault();
 
@@ -27,20 +27,25 @@ try {
     });
 
     //Setting up the view component
-    $di->set('view', function(){
-        $view = new \Phalcon\Mvc\View();
-        $view->setViewsDir('../app/views/');
-        return $view;
-    });
 	$di->set('view', function(){
         $view = new \Phalcon\Mvc\View();
         $view->setViewsDir('../app/views/');
+		$view->registerEngines(array(
+    ".phtml" => 'Phalcon\Mvc\View\Engine\Volt'
+));
         return $view;
     });
+	
 
 	 $di->set('modelsManager', function() {
 	      return new Phalcon\Mvc\Model\Manager();
 	 });
+	 $di->setShared('session', function() {
+    	$session = new Phalcon\Session\Adapter\Files();
+    	$session->start();
+    	return $session;
+	});
+	 
 	
 
     //Handle the request

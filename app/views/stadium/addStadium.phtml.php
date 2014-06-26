@@ -94,7 +94,7 @@
 </div>
         <table cellpadding="0" cellspacing="0" class="l-table-edit" >
             <tr>
-                <td align="right" class="l-table-edit-td">所属公司 {% if userInfo['userId']==1 %} Yes {% endif%}:</td>
+                <td align="right" class="l-table-edit-td">所属公司 <?php if ($userInfo['userId'] == 1) { ?> Yes <?php } ?>:</td>
                 <td align="left" class="l-table-edit-td">
                 <?php echo Phalcon\Tag::selectStatic("belongComId", $companyList);//输出下拉框 参数1、name名称和id 参数2、属性值 A为下拉框的value值 ?>
                 	<td align="left"></td>
